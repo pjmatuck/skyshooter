@@ -26,7 +26,6 @@ public class PlayerController : MonoBehaviour
         //moveY = Input.GetAxis("Vertical");
 
         direction = _playerInput.actions["Move"].ReadValue<Vector2>();
-        Debug.Log(direction.x + ", " + direction.y);
 
         if(Input.GetKeyDown(KeyCode.Space))
         {
