@@ -2,24 +2,31 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class PlayerController : MonoBehaviour
 {
     [SerializeField] float speed;
     [SerializeField] GameObject bullet;
 
+    PlayerInput _playerInput;
     Rigidbody2D _rigidbody2D;
-    float moveX, moveY;
+    //float moveX, moveY;
+    Vector2 direction;
 
     void Start()
     {
+        _playerInput = GetComponent<PlayerInput>();
         _rigidbody2D = GetComponent<Rigidbody2D>();
     }
 
     void Update()
     {
-        moveX = Input.GetAxis("Horizontal");
-        moveY = Input.GetAxis("Vertical");
+        //moveX = Input.GetAxis("Horizontal");
+        //moveY = Input.GetAxis("Vertical");
+
+        direction = _playerInput.actions["Move"].ReadValue<Vector2>();
+        Debug.Log(direction.x + ", " + direction.y);
 
         if(Input.GetKeyDown(KeyCode.Space))
         {
@@ -27,7 +34,12 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    private void Shoot()
+    public void Move(Vector2 direction)
+    {
+        _rigidbody2D.velocity = direction * speed;
+    }
+
+    public void Shoot()
     {
         Instantiate(
             bullet, 
@@ -37,7 +49,7 @@ public class PlayerController : MonoBehaviour
 
     void FixedUpdate()
     {
-        _rigidbody2D.velocity = new Vector2(moveX, moveY) * speed;
+        Move(direction);
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
