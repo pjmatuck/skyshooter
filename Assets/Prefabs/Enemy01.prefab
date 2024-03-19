@@ -46,7 +46,7 @@ GameObject:
   - component: {fileID: 6231890584645273762}
   - component: {fileID: 5236150034273626178}
   m_Layer: 0
-  m_Name: enemy_01
+  m_Name: Enemy01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -209,5 +209,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gunPivot: {fileID: 6101382459928816534}
-  projectile: {fileID: 6977376744993918342, guid: 07e593c948040204d9631046a589233b, type: 3}
+  projectile: {fileID: 6753339710792713598, guid: 275053b90748c7a4a8151e7ee064d236, type: 3}
   inverseDirection: 1

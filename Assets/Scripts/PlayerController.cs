@@ -11,7 +11,7 @@ public class PlayerController : MonoBehaviour
 
     PlayerInput _playerInput;
     Rigidbody2D _rigidbody2D;
-    //float moveX, moveY;
+    float moveX, moveY;
     Vector2 direction;
 
     void Start()
@@ -22,8 +22,11 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
-        //moveX = Input.GetAxis("Horizontal");
-        //moveY = Input.GetAxis("Vertical");
+#if UNITY_EDITOR
+        moveX = Input.GetAxis("Horizontal");
+        moveY = Input.GetAxis("Vertical");
+        direction = new Vector2(moveX, moveY);
+#endif
 
         direction = _playerInput.actions["Move"].ReadValue<Vector2>();
 
@@ -57,6 +60,16 @@ public class PlayerController : MonoBehaviour
         {
             //TODO: Powerup collected
             Destroy(collision.gameObject);
+        }
+
+        if (collision.CompareTag("Enemy"))
+        {
+            Debug.Log("Bateu!");
+        }
+
+        if (collision.CompareTag("EnemyBullet"))
+        {
+            Debug.Log("Levou tiro");
         }
     }
 }
