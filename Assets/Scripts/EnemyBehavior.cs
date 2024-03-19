@@ -3,6 +3,15 @@ using UnityEngine;
 public class EnemyBehavior : MonoBehaviour
 {
     [SerializeField] float speed;
+    [SerializeField][Tooltip("In seconds")] float timeToShoot;
+    
+    GunController _gun;
+
+    void Start()
+    {
+        _gun = GetComponent<GunController>();
+        InvokeRepeating(nameof(Shoot), timeToShoot, timeToShoot);    
+    }
 
     private void FixedUpdate()
     {
@@ -15,6 +24,11 @@ public class EnemyBehavior : MonoBehaviour
     void SelfDestroy()
     {
         Destroy(gameObject);
+    }
+
+    void Shoot()
+    {
+        _gun.Shoot();
     }
 
     private void OnTriggerEnter2D(Collider2D collision)

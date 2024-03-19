@@ -5,14 +5,14 @@ using UnityEngine;
 public class GunController : MonoBehaviour
 {
     [SerializeField] Transform gunPivot;
-    [SerializeField] float shootSpeed;
     [SerializeField] GameObject projectile;
+    [SerializeField] bool inverseDirection; //TODO: avoid upside sprites and use rotation
 
-    private void Shoot()
+    public void Shoot()
     {
         Instantiate(
             projectile,
-            new Vector3(transform.position.x, transform.position.y, transform.position.z),
-            Quaternion.identity);
+            new Vector3(gunPivot.position.x, gunPivot.position.y, gunPivot.position.z),
+            inverseDirection ? Quaternion.Euler(0f, 0f, 180f) : Quaternion.identity);
     }
 }
