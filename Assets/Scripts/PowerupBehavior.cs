@@ -27,7 +27,7 @@ public class PowerupBehavior : MonoBehaviour
         if (transform.position.x < -2.5f || transform.position.x > 2.5f)
             direction.x *= -1;
 
-        if(transform.position.y > 4.8 || transform.position.y < -4.8)
+        if(transform.position.y > 4.8)
             direction.y *= -1;
     }
 
