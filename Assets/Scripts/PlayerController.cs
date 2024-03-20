@@ -8,20 +8,32 @@ public class PlayerController : MonoBehaviour
 {
     [SerializeField] float speed;
     [SerializeField] GameObject bullet;
+    [SerializeField] float shootSpeedPerSec;
 
     PlayerInput _playerInput;
     Rigidbody2D _rigidbody2D;
     float moveX, moveY;
     Vector2 direction;
+    JoystickController _joystickController;
+    UIController _uiController;
+    GameManager _gameManager;
 
     void Start()
     {
         _playerInput = GetComponent<PlayerInput>();
         _rigidbody2D = GetComponent<Rigidbody2D>();
+        _joystickController = ServiceLocator.Current.Get<JoystickController>();
+        _uiController = ServiceLocator.Current.Get<UIController>();
+        _gameManager = ServiceLocator.Current.Get<GameManager>();
+
+        _gameManager.OnGameStateChanged += OnGameStateChange;
+
+        InvokeRepeating(nameof(Shoot), 0f, 1 / shootSpeedPerSec);
     }
 
     void Update()
     {
+
 #if UNITY_EDITOR
         moveX = Input.GetAxis("Horizontal");
         moveY = Input.GetAxis("Vertical");
@@ -30,10 +42,10 @@ public class PlayerController : MonoBehaviour
 
         direction = _playerInput.actions["Move"].ReadValue<Vector2>();
 
-        if(Input.GetKeyDown(KeyCode.Space))
-        {
-            Shoot();
-        }
+        if (direction.magnitude > 0)
+            _joystickController.EnableJoystick();
+        else 
+            _joystickController.DisableJoystick();
     }
 
     public void Move(Vector2 direction)
@@ -64,12 +76,31 @@ public class PlayerController : MonoBehaviour
 
         if (collision.CompareTag("Enemy"))
         {
-            Debug.Log("Bateu!");
+            GameOver();
         }
 
         if (collision.CompareTag("EnemyBullet"))
         {
-            Debug.Log("Levou tiro");
+            GameOver();
         }
+    }
+
+    private void GameOver()
+    {
+        _uiController.GameOver();
+        _gameManager.SetState(GameManager.GameState.GAMEOVER);
+    }
+
+    private void OnGameStateChange(GameManager.GameState state)
+    {
+        if(state == GameManager.GameState.GAMEOVER)
+        {
+            gameObject.SetActive(false);
+        }
+    }
+
+    private void OnDisable()
+    {
+        CancelInvoke();
     }
 }

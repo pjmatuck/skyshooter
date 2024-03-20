@@ -39,4 +39,9 @@ public class EnemyBehavior : MonoBehaviour
             SelfDestroy();
         }
     }
+
+    private void OnDisable()
+    {
+        CancelInvoke();
+    }
 }

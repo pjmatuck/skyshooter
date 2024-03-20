@@ -10,6 +10,9 @@ public class EnemySpawner : MonoBehaviour
     void Start()
     {
         InvokeRepeating(nameof(SpawnEnemy), 0f, spawnTime);
+
+        ServiceLocator.Current.Get<GameManager>().OnGameStateChanged +=
+            OnGameStateChange;
     }
 
     void SpawnEnemy()
@@ -18,5 +21,13 @@ public class EnemySpawner : MonoBehaviour
             new Vector3(Random.Range(-2f, 2f), transform.position.y, transform.position.z), 
             Quaternion.identity, 
             transform);
+    }
+
+    private void OnGameStateChange(GameManager.GameState state)
+    {
+        if (state == GameManager.GameState.GAMEOVER)
+        {
+            gameObject.SetActive(false);
+        }
     }
 }

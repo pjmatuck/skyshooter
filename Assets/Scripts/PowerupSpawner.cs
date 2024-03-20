@@ -9,7 +9,10 @@ public class PowerupSpawner : MonoBehaviour
 
     void Start()
     {
-        InvokeRepeating(nameof(SpawnPowerUp), spawnTime, spawnTime);    
+        InvokeRepeating(nameof(SpawnPowerUp), spawnTime, spawnTime);
+
+        ServiceLocator.Current.Get<GameManager>().OnGameStateChanged +=
+            OnGameStateChange;
     }
 
     void SpawnPowerUp()
@@ -20,5 +23,13 @@ public class PowerupSpawner : MonoBehaviour
             0f);
 
         Instantiate(powerup, position, Quaternion.identity);
+    }
+
+    private void OnGameStateChange(GameManager.GameState state)
+    {
+        if (state == GameManager.GameState.GAMEOVER)
+        {
+            gameObject.SetActive(false);
+        }
     }
 }
