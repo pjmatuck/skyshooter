@@ -9,6 +9,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField] float speed;
     [SerializeField] GameObject bullet;
     [SerializeField] float shootSpeedPerSec;
+    [SerializeField] float blinkingTotalTime;
+    [SerializeField] float blinkingInterval;
 
     PlayerInput _playerInput;
     Rigidbody2D _rigidbody2D;
@@ -17,6 +19,9 @@ public class PlayerController : MonoBehaviour
     JoystickController _joystickController;
     UIController _uiController;
     GameManager _gameManager;
+    int _playerHP = 3;
+    PlayerState _currentState;
+    SpriteRenderer _spriteRenderer;
 
     void Start()
     {
@@ -25,8 +30,11 @@ public class PlayerController : MonoBehaviour
         _joystickController = ServiceLocator.Current.Get<JoystickController>();
         _uiController = ServiceLocator.Current.Get<UIController>();
         _gameManager = ServiceLocator.Current.Get<GameManager>();
+        _spriteRenderer = GetComponent<SpriteRenderer>();
 
         _gameManager.OnGameStateChanged += OnGameStateChange;
+
+        _currentState = PlayerState.NORMAL;
 
         InvokeRepeating(nameof(Shoot), 0f, 1 / shootSpeedPerSec);
     }
@@ -74,15 +82,44 @@ public class PlayerController : MonoBehaviour
             Destroy(collision.gameObject);
         }
 
+        if (_currentState != PlayerState.NORMAL)
+            return;
+
         if (collision.CompareTag("Enemy"))
         {
-            GameOver();
+            GetDamage();
         }
 
         if (collision.CompareTag("EnemyBullet"))
         {
-            GameOver();
+            GetDamage();
         }
+    }
+
+    IEnumerator Blink()
+    {
+        _currentState = PlayerState.BLINKING;
+
+        float timer = 0f;
+        while(timer < blinkingTotalTime)
+        {
+            _spriteRenderer.enabled = !_spriteRenderer.enabled;
+            yield return new WaitForSeconds(blinkingInterval);
+            timer += blinkingInterval;
+        }
+
+        _spriteRenderer.enabled = true;
+
+        _currentState = PlayerState.NORMAL;
+    }
+
+    private void GetDamage()
+    {
+        _playerHP--;
+        if (_playerHP == 0)
+            GameOver();
+        _uiController.DecreaseHP();
+        StartCoroutine(Blink());
     }
 
     private void GameOver()
@@ -102,5 +139,11 @@ public class PlayerController : MonoBehaviour
     private void OnDisable()
     {
         CancelInvoke();
+    }
+
+    enum PlayerState
+    {
+        BLINKING,
+        NORMAL
     }
 }

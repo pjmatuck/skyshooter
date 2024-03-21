@@ -7,9 +7,11 @@ public class UIController : MonoBehaviour, IGameService
     [SerializeField] TMP_Text gameOverLabel;
     [SerializeField] TMP_Text gameOverCounter;
     [SerializeField] TMP_Text enemyKillCount;
+    [SerializeField] GameObject[] playerHearts;
 
     int gameOverCounterValue = 3;
     int killCount = 0;
+    int playerHp = 3;
 
     private void Awake()
     {
@@ -45,5 +47,11 @@ public class UIController : MonoBehaviour, IGameService
     {
         killCount++;
         enemyKillCount.text = killCount.ToString();
+    }
+
+    public void DecreaseHP()
+    {
+        playerHp--;
+        playerHearts[playerHp].gameObject.SetActive(false);
     }
 }
