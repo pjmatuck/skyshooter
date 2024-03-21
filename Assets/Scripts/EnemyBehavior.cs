@@ -6,10 +6,12 @@ public class EnemyBehavior : MonoBehaviour
     [SerializeField][Tooltip("In seconds")] float timeToShoot;
     
     GunController _gun;
+    UIController _uiController;
 
     void Start()
     {
         _gun = GetComponent<GunController>();
+        _uiController = ServiceLocator.Current.Get<UIController>();
         InvokeRepeating(nameof(Shoot), timeToShoot, timeToShoot);    
     }
 
@@ -35,6 +37,7 @@ public class EnemyBehavior : MonoBehaviour
     {
         if (collision.CompareTag("PlayerBullet"))
         {
+            _uiController.IncreaseKillCount();
             Destroy(collision.gameObject);
             SelfDestroy();
         }

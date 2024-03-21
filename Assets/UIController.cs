@@ -6,8 +6,10 @@ public class UIController : MonoBehaviour, IGameService
 {
     [SerializeField] TMP_Text gameOverLabel;
     [SerializeField] TMP_Text gameOverCounter;
+    [SerializeField] TMP_Text enemyKillCount;
 
     int gameOverCounterValue = 3;
+    int killCount = 0;
 
     private void Awake()
     {
@@ -37,5 +39,11 @@ public class UIController : MonoBehaviour, IGameService
         gameOverCounter.text = gameOverCounterValue.ToString();
         gameOverCounterValue--;
 
+    }
+
+    public void IncreaseKillCount()
+    {
+        killCount++;
+        enemyKillCount.text = killCount.ToString();
     }
 }
