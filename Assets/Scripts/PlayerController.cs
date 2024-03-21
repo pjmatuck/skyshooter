@@ -11,6 +11,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField] float shootSpeedPerSec;
     [SerializeField] float blinkingTotalTime;
     [SerializeField] float blinkingInterval;
+    [SerializeField] Transform gunPivot;
+    [SerializeField] SimpleGunController gunController;
 
     PlayerInput _playerInput;
     Rigidbody2D _rigidbody2D;
@@ -31,6 +33,8 @@ public class PlayerController : MonoBehaviour
         _uiController = ServiceLocator.Current.Get<UIController>();
         _gameManager = ServiceLocator.Current.Get<GameManager>();
         _spriteRenderer = GetComponent<SpriteRenderer>();
+
+        gunController = Instantiate(gunController, gunPivot);
 
         _gameManager.OnGameStateChanged += OnGameStateChange;
 
@@ -63,10 +67,7 @@ public class PlayerController : MonoBehaviour
 
     public void Shoot()
     {
-        Instantiate(
-            bullet, 
-            new Vector3(transform.position.x, transform.position.y, transform.position.z), 
-            Quaternion.identity);
+        gunController.Shoot();
     }
 
     void FixedUpdate()
@@ -78,7 +79,7 @@ public class PlayerController : MonoBehaviour
     {
         if (collision.CompareTag("Powerup"))
         {
-            //TODO: Powerup collected
+            gunController.LevelUp();
             Destroy(collision.gameObject);
         }
 
@@ -117,13 +118,19 @@ public class PlayerController : MonoBehaviour
     {
         _playerHP--;
         if (_playerHP == 0)
+        {
             GameOver();
-        _uiController.DecreaseHP();
-        StartCoroutine(Blink());
+        }
+        else
+        {
+            _uiController.DecreaseHP();
+            StartCoroutine(Blink());
+        }
     }
 
     private void GameOver()
     {
+        StopAllCoroutines();
         _uiController.GameOver();
         _gameManager.SetState(GameManager.GameState.GAMEOVER);
     }

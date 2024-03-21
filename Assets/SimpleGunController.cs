@@ -1,0 +1,67 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class SimpleGunController : MonoBehaviour
+{
+    [SerializeField] GameObject bullet;
+    [SerializeField] Transform[] pivotPoints;
+
+    Dictionary<int, int[]> levelPivotsMap = new Dictionary<int, int[]>
+    {
+        {1, new int[] {2} },
+        {2, new int[] {1,3} },
+        {3, new int[] {1,2,3} },
+        {4, new int[] {0,1,3,4} },
+        {5, new int[] {0,1,2,3,4} }
+    };
+
+    void Start()
+    {
+        EnablePivot(_currentLevel);    
+    }
+
+    int _currentLevel = 1;
+
+    public void LevelUp()
+    {
+        if (_currentLevel == levelPivotsMap.Count) return;
+
+        _currentLevel++;
+        EnablePivot(_currentLevel);
+    }
+
+    public void LevelDown()
+    {
+        if (_currentLevel == 0) return;
+
+        _currentLevel--;
+        EnablePivot(_currentLevel);
+    }
+
+    private void EnablePivot(int level)
+    {
+        var getMap = levelPivotsMap[level];
+
+        foreach (var p in pivotPoints)
+        {
+            p.gameObject.SetActive(false);
+        }
+
+        foreach (var m in getMap)
+        {
+            pivotPoints[m].gameObject.SetActive(true);
+        }
+    }
+
+    public void Shoot()
+    {
+        foreach(var p in pivotPoints)
+        {
+            if (p.gameObject.activeSelf)
+            {
+                Instantiate(bullet, p.position, Quaternion.identity);
+            }
+        }
+    }
+}

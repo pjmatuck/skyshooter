@@ -1,10 +1,13 @@
+using System.Collections;
 using UnityEngine;
 
 public class EnemyBehavior : MonoBehaviour
 {
     [SerializeField] float speed;
-    [SerializeField][Tooltip("In seconds")] float timeToShoot;
-    
+    [SerializeField][Tooltip("In seconds")] float minTimeToShoot;
+    [SerializeField][Tooltip("In seconds")] float maxTimeToShoot;
+    [SerializeField] float startShootingCooldown;
+
     GunController _gun;
     UIController _uiController;
 
@@ -12,7 +15,7 @@ public class EnemyBehavior : MonoBehaviour
     {
         _gun = GetComponent<GunController>();
         _uiController = ServiceLocator.Current.Get<UIController>();
-        InvokeRepeating(nameof(Shoot), timeToShoot, timeToShoot);    
+        StartCoroutine(Shoot());
     }
 
     private void FixedUpdate()
@@ -28,9 +31,16 @@ public class EnemyBehavior : MonoBehaviour
         Destroy(gameObject);
     }
 
-    void Shoot()
+    IEnumerator Shoot()
     {
-        _gun.Shoot();
+        yield return new WaitForSeconds(startShootingCooldown);
+
+        while(true)
+        {
+            _gun.Shoot();
+            float timeToShoot = Random.Range(minTimeToShoot, maxTimeToShoot);
+            yield return new WaitForSeconds(timeToShoot);
+        }
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -46,5 +56,6 @@ public class EnemyBehavior : MonoBehaviour
     private void OnDisable()
     {
         CancelInvoke();
+        StopAllCoroutines();
     }
 }

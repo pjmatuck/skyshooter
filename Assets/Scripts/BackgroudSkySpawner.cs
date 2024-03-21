@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class BackgroudSkySpawner : MonoBehaviour
 {
-    [SerializeField] Sprite backgroundTile;
     [SerializeField] float speed;
     [SerializeField] List<Transform> tilePoints;
 
