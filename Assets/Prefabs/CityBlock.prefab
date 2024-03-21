@@ -110,7 +110,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 10
   m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
   m_Color: {r: 0.9622642, g: 0.67248803, b: 0.22241013, a: 1}
   m_FlipX: 0
@@ -194,7 +194,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 1
+  m_SortingOrder: 11
   m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
   m_Color: {r: 0, g: 0.4716981, b: 0.14615779, a: 1}
   m_FlipX: 0
@@ -216,7 +216,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 5276703591723639636, guid: a7a018567498e9447a9048ef34dbee82, type: 3}
       propertyPath: m_SortingOrder
-      value: 1
+      value: 13
       objectReference: {fileID: 0}
     - target: {fileID: 5276703591723639637, guid: a7a018567498e9447a9048ef34dbee82, type: 3}
       propertyPath: m_LocalPosition.x
@@ -282,7 +282,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1610351895317967462, guid: d8fa3df575c32414c8ceb24bfbb3b9a4, type: 3}
       propertyPath: m_SortingOrder
-      value: 1
+      value: 12
       objectReference: {fileID: 0}
     - target: {fileID: 2580162181571364766, guid: d8fa3df575c32414c8ceb24bfbb3b9a4, type: 3}
       propertyPath: m_Name
@@ -392,7 +392,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7862917709173938517, guid: b0994952525b5f842b8ab94d60308a31, type: 3}
       propertyPath: m_SortingOrder
-      value: 1
+      value: 12
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -458,7 +458,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8267313434677244571, guid: 660de991c6e96574594b49018232048b, type: 3}
       propertyPath: m_SortingOrder
-      value: 1
+      value: 13
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -492,7 +492,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5276703591723639636, guid: a7a018567498e9447a9048ef34dbee82, type: 3}
       propertyPath: m_SortingOrder
-      value: 1
+      value: 13
       objectReference: {fileID: 0}
     - target: {fileID: 5276703591723639637, guid: a7a018567498e9447a9048ef34dbee82, type: 3}
       propertyPath: m_LocalPosition.x
