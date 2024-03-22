@@ -12,10 +12,12 @@ public class EnemyBehavior : MonoBehaviour
     GunController _gun;
     UIController _uiController;
     AudioManager _audioManager;
+    Animator _animator;
 
     void Start()
     {
         _gun = GetComponent<GunController>();
+        _animator = GetComponent<Animator>();
 
         _uiController = ServiceLocator.Current.Get<UIController>();
         _audioManager = ServiceLocator.Current.Get<AudioManager>();
@@ -55,7 +57,8 @@ public class EnemyBehavior : MonoBehaviour
             _uiController.IncreaseKillCount();
             _audioManager.PlaySFX(explosionSFX);
             Destroy(collision.gameObject);
-            SelfDestroy();
+            _animator.SetTrigger("explode");
+            gameObject.tag = "Untagged";
         }
     }
 
@@ -63,5 +66,10 @@ public class EnemyBehavior : MonoBehaviour
     {
         CancelInvoke();
         StopAllCoroutines();
+    }
+
+    public void AnimExplosionEnds()
+    {
+        SelfDestroy();
     }
 }

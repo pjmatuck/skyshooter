@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.Animations;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -24,15 +25,18 @@ public class PlayerController : MonoBehaviour
     int _playerHP = 3;
     PlayerState _currentState;
     SpriteRenderer _spriteRenderer;
+    Animator _animator;
 
     void Start()
     {
         _playerInput = GetComponent<PlayerInput>();
         _rigidbody2D = GetComponent<Rigidbody2D>();
+        _spriteRenderer = GetComponent<SpriteRenderer>();
+        _animator = GetComponent<Animator>();       
+
         _joystickController = ServiceLocator.Current.Get<JoystickController>();
         _uiController = ServiceLocator.Current.Get<UIController>();
         _gameManager = ServiceLocator.Current.Get<GameManager>();
-        _spriteRenderer = GetComponent<SpriteRenderer>();
 
         gunController = Instantiate(gunController, gunPivot);
 
@@ -41,6 +45,7 @@ public class PlayerController : MonoBehaviour
         _currentState = PlayerState.NORMAL;
 
         InvokeRepeating(nameof(Shoot), 0f, 1 / shootSpeedPerSec);
+
     }
 
     void Update()
@@ -131,21 +136,29 @@ public class PlayerController : MonoBehaviour
     private void GameOver()
     {
         StopAllCoroutines();
+        CancelInvoke();
         _uiController.GameOver();
         _gameManager.SetState(GameManager.GameState.GAMEOVER);
+        _animator.SetTrigger("explode");
     }
 
     private void OnGameStateChange(GameManager.GameState state)
     {
         if(state == GameManager.GameState.GAMEOVER)
         {
-            gameObject.SetActive(false);
+            
         }
     }
 
     private void OnDisable()
     {
         CancelInvoke();
+    }
+
+    public void AnimExplosionEnds()
+    {
+        Debug.Log("Explosion ends");
+        gameObject.SetActive(false);
     }
 
     enum PlayerState
