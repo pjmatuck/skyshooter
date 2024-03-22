@@ -7,14 +7,19 @@ public class EnemyBehavior : MonoBehaviour
     [SerializeField][Tooltip("In seconds")] float minTimeToShoot;
     [SerializeField][Tooltip("In seconds")] float maxTimeToShoot;
     [SerializeField] float startShootingCooldown;
+    [SerializeField] AudioClip explosionSFX;
 
     GunController _gun;
     UIController _uiController;
+    AudioManager _audioManager;
 
     void Start()
     {
         _gun = GetComponent<GunController>();
+
         _uiController = ServiceLocator.Current.Get<UIController>();
+        _audioManager = ServiceLocator.Current.Get<AudioManager>();
+
         StartCoroutine(Shoot());
     }
 
@@ -48,6 +53,7 @@ public class EnemyBehavior : MonoBehaviour
         if (collision.CompareTag("PlayerBullet"))
         {
             _uiController.IncreaseKillCount();
+            _audioManager.PlaySFX(explosionSFX);
             Destroy(collision.gameObject);
             SelfDestroy();
         }

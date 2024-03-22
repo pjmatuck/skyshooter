@@ -149,6 +149,7 @@ MonoBehaviour:
   - {fileID: 5561160249633079617}
   - {fileID: 5216045177109523796}
   - {fileID: 1529845175826914461}
+  shootSFX: {fileID: 8300000, guid: c6607bb6eba15e745935cd871365eb15, type: 3}
 --- !u!1 &6188232587837201451
 GameObject:
   m_ObjectHideFlags: 0

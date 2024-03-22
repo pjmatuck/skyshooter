@@ -136,6 +136,7 @@ MonoBehaviour:
   minTimeToShoot: 1
   maxTimeToShoot: 3
   startShootingCooldown: 2
+  explosionSFX: {fileID: 8300000, guid: 72739380e49665e4e98bbc2b0a405743, type: 3}
 --- !u!50 &-1619210799208508031
 Rigidbody2D:
   serializedVersion: 4

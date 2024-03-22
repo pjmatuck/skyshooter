@@ -1,11 +1,15 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Security.Cryptography;
 using UnityEngine;
 
 public class SimpleGunController : MonoBehaviour
 {
     [SerializeField] GameObject bullet;
     [SerializeField] Transform[] pivotPoints;
+    [SerializeField] AudioClip shootSFX;
+
+    AudioManager _audioManager;
 
     Dictionary<int, int[]> levelPivotsMap = new Dictionary<int, int[]>
     {
@@ -15,6 +19,11 @@ public class SimpleGunController : MonoBehaviour
         {4, new int[] {0,1,3,4} },
         {5, new int[] {0,1,2,3,4} }
     };
+
+    void Awake()
+    {
+        _audioManager = ServiceLocator.Current.Get<AudioManager>();
+    }
 
     void Start()
     {
@@ -56,6 +65,8 @@ public class SimpleGunController : MonoBehaviour
 
     public void Shoot()
     {
+        _audioManager.PlaySFX(shootSFX);
+
         foreach(var p in pivotPoints)
         {
             if (p.gameObject.activeSelf)
