@@ -1,11 +1,35 @@
-using System.Collections;
-using System.Collections.Generic;
+using System;
 using UnityEngine;
 
 public class PowerupSpawner : MonoBehaviour
 {
-    [SerializeField] GameObject powerup;
+    [SerializeField] GameObject powerupPrefab;
     [SerializeField] float spawnTime;
+
+    int spawned;
+    public int Spawned
+    {
+        get => spawned;
+        set
+        {
+            spawned = value;
+            OnObjectSpawned(spawned);
+        }
+    }
+
+    int collected;
+    public int Collected
+    {
+        get => collected;
+        set
+        {
+            collected = value;
+            OnObjectCollected(collected);
+        }
+    }
+
+    public event Action<int> OnObjectCollected;
+    public event Action<int> OnObjectSpawned;
 
     void Start()
     {
@@ -18,11 +42,13 @@ public class PowerupSpawner : MonoBehaviour
     void SpawnPowerUp()
     {
         Vector3 position = new Vector3(
-            Random.Range(-2.5f, 2.5f),
-            Random.Range(0f, 5f),
+            UnityEngine.Random.Range(-2.5f, 2.5f),
+            UnityEngine.Random.Range(0f, 5f),
             0f);
 
-        Instantiate(powerup, position, Quaternion.identity);
+        var powerUp = Instantiate(powerupPrefab, position, Quaternion.identity);
+        powerUp.GetComponent<PowerupBehavior>().OnPowerupCollected += OnPowerUpCollected;
+        spawned++;
     }
 
     private void OnGameStateChange(GameManager.GameState state)
@@ -31,5 +57,10 @@ public class PowerupSpawner : MonoBehaviour
         {
             gameObject.SetActive(false);
         }
+    }
+
+    public void OnPowerUpCollected()
+    {
+        collected++;
     }
 }

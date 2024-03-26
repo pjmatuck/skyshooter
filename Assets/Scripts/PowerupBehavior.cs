@@ -1,5 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
+using System;
 using UnityEngine;
 
 public class PowerupBehavior : MonoBehaviour
@@ -11,10 +10,12 @@ public class PowerupBehavior : MonoBehaviour
 
     int[] xDirections = new int[] { -1, 1 };
 
+    public event Action OnPowerupCollected;
+
     void Start()
     {
         direction = new Vector2(
-            xDirections[Random.Range(0, 2)],
+            xDirections[UnityEngine.Random.Range(0, 2)],
             -1);
 
         Invoke(nameof(SelfDestroy), lifeSpan);
@@ -34,5 +35,13 @@ public class PowerupBehavior : MonoBehaviour
     void SelfDestroy()
     {
         Destroy(gameObject);
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.CompareTag("Player"))
+        {
+            OnPowerupCollected();
+        }
     }
 }

@@ -1,7 +1,5 @@
-using System;
+
 using System.Collections;
-using System.Collections.Generic;
-using UnityEditor.Animations;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -22,6 +20,7 @@ public class PlayerController : MonoBehaviour
     JoystickController _joystickController;
     UIController _uiController;
     GameManager _gameManager;
+    AchievementsManager _achievementsManager;
     int _playerHP = 3;
     PlayerState _currentState;
     SpriteRenderer _spriteRenderer;

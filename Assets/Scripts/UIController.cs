@@ -13,16 +13,6 @@ public class UIController : MonoBehaviour, IGameService
     int killCount = 0;
     int playerHp = 3;
 
-    private void Awake()
-    {
-        ServiceLocator.Current.Register(this);
-    }
-
-    private void OnDestroy()
-    {
-        ServiceLocator.Current.Unregister(this);
-    }
-
     public void GameOver()
     {
         gameOverLabel.gameObject.SetActive(true);
@@ -53,5 +43,38 @@ public class UIController : MonoBehaviour, IGameService
     {
         playerHp--;
         playerHearts[playerHp].gameObject.SetActive(false);
+    }
+
+    public void RestoreKillCount()
+    {
+        killCount = 0;
+        enemyKillCount.text = killCount.ToString();
+    }
+
+    public void RestoreHP()
+    {
+        playerHp = 3;
+        foreach(var heart in playerHearts)
+        {
+            heart.gameObject.SetActive(true);
+        }
+    }
+
+    public void RestoreUI()
+    {
+        RestoreHP();
+        RestoreKillCount();
+    }
+
+    private void OnEnable()
+    {
+        if (ServiceLocator.Current != null)
+            ServiceLocator.Current.Register(this);
+    }
+
+    private void OnDisable()
+    {
+        if (ServiceLocator.Current != null)
+            ServiceLocator.Current.Unregister(this);
     }
 }

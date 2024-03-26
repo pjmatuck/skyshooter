@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using UnityEngine;
 
@@ -13,6 +14,11 @@ public class EnemyBehavior : MonoBehaviour
     UIController _uiController;
     AudioManager _audioManager;
     Animator _animator;
+    AchievementsManager _achievementsManager;
+
+    EnemyState _state;
+
+    public event Action OnDestruction;
 
     void Start()
     {
@@ -42,23 +48,25 @@ public class EnemyBehavior : MonoBehaviour
     {
         yield return new WaitForSeconds(startShootingCooldown);
 
-        while(true)
+        while(_state == EnemyState.OK)
         {
             _gun.Shoot();
-            float timeToShoot = Random.Range(minTimeToShoot, maxTimeToShoot);
+            float timeToShoot = UnityEngine.Random.Range(minTimeToShoot, maxTimeToShoot);
             yield return new WaitForSeconds(timeToShoot);
         }
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.CompareTag("PlayerBullet"))
+        if (collision.CompareTag("PlayerBullet") && _state != EnemyState.EXPLODING)
         {
-            _uiController.IncreaseKillCount();
             _audioManager.PlaySFX(explosionSFX);
             Destroy(collision.gameObject);
             _animator.SetTrigger("explode");
             gameObject.tag = "Untagged";
+            _uiController.IncreaseKillCount();
+            _state = EnemyState.EXPLODING;
+            OnDestruction();
         }
     }
 
@@ -72,4 +80,10 @@ public class EnemyBehavior : MonoBehaviour
     {
         SelfDestroy();
     }
+}
+
+public enum EnemyState
+{
+    OK,
+    EXPLODING
 }

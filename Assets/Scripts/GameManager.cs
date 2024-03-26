@@ -21,13 +21,15 @@ public class GameManager : MonoBehaviour, IGameService
         OnGameStateChanged(CurrentState);
     }
 
-    private void Awake()
+    private void OnEnable()
     {
-        ServiceLocator.Current.Register(this);
+        if (ServiceLocator.Current != null)
+            ServiceLocator.Current.Register(this);
     }
 
-    private void OnDestroy()
+    private void OnDisable()
     {
-        ServiceLocator.Current.Unregister(this);
+        if (ServiceLocator.Current != null)
+            ServiceLocator.Current.Unregister(this);
     }
 }

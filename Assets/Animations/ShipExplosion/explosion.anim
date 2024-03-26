@@ -164,7 +164,7 @@ AnimationClip:
   m_HasMotionFloatCurves: 0
   m_Events:
   - time: 2.5833333
-    functionName: AnimExplostionEnds
+    functionName: AnimExplosionEnds
     data: 
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0

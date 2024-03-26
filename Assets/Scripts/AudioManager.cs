@@ -18,11 +18,13 @@ public class AudioManager : MonoBehaviour, IGameService
 
     private void OnEnable()
     {
-        ServiceLocator.Current.Register(this);
+        if (ServiceLocator.Current != null)
+            ServiceLocator.Current.Register(this);
     }
 
     private void OnDisable()
     {
-        ServiceLocator.Current.Unregister(this);
+        if (ServiceLocator.Current != null)
+            ServiceLocator.Current.Unregister(this);
     }
 }

@@ -5,10 +5,6 @@ using UnityEngine;
 public class JoystickController : MonoBehaviour, IGameService
 {
     [SerializeField] GameObject joystickImageGameObject;
-    private void Awake()
-    {
-        ServiceLocator.Current.Register(this);
-    }
 
     public void EnableJoystick()
     {
@@ -20,8 +16,15 @@ public class JoystickController : MonoBehaviour, IGameService
         joystickImageGameObject.SetActive(false);
     }
 
-    private void OnDestroy()
+    private void OnEnable()
     {
-        ServiceLocator.Current.Unregister(this);
+        if (ServiceLocator.Current != null)
+            ServiceLocator.Current.Register(this);
+    }
+
+    private void OnDisable()
+    {
+        if (ServiceLocator.Current != null)
+            ServiceLocator.Current.Unregister(this);
     }
 }

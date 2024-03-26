@@ -1,11 +1,41 @@
-using System.Collections;
-using System.Collections.Generic;
+using System;
 using UnityEngine;
 
 public class EnemySpawner : MonoBehaviour
 {
-    [SerializeField] GameObject enemy;
+    [SerializeField] GameObject enemyPrefab;
     [SerializeField] float spawnTime;
+
+    int spawned;
+    public int Spawned
+    {
+        get => spawned;
+        set
+        {
+            spawned = value;
+            if (OnObjectSpawned != null)
+            {
+                OnObjectSpawned(spawned);
+            }
+        }
+    }
+
+    int destroyed;
+    public int Destroyed
+    {
+        get => destroyed;
+        set
+        {
+            destroyed = value;
+            if (OnObjectDestroyed != null)
+            {
+                OnObjectDestroyed(destroyed);
+            }
+        }
+    }
+
+    public event Action<int> OnObjectDestroyed;
+    public event Action<int> OnObjectSpawned;
 
     void Start()
     {
@@ -17,10 +47,12 @@ public class EnemySpawner : MonoBehaviour
 
     void SpawnEnemy()
     {
-        Instantiate(enemy, 
-            new Vector3(Random.Range(-2f, 2f), transform.position.y, transform.position.z), 
+        var prefab = Instantiate(enemyPrefab, 
+            new Vector3(UnityEngine.Random.Range(-2f, 2f), transform.position.y, transform.position.z), 
             Quaternion.identity, 
             transform);
+        Spawned++;
+        prefab.GetComponent<EnemyBehavior>().OnDestruction += OnEnemyDestruction;
     }
 
     private void OnGameStateChange(GameManager.GameState state)
@@ -29,5 +61,10 @@ public class EnemySpawner : MonoBehaviour
         {
             gameObject.SetActive(false);
         }
+    }
+
+    void OnEnemyDestruction()
+    {
+        Destroyed++;
     }
 }
