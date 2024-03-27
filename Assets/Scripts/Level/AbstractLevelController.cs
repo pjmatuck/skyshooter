@@ -5,6 +5,12 @@ using UnityEngine;
 
 public abstract class AbstractLevelController : MonoBehaviour
 {
+    [SerializeField] float startingTime;
+    [SerializeField] string levelName;
+
+    public float StartingTime => startingTime;
+    public string LevelName => levelName;
+
     LevelState _levelState;
     public LevelState LevelState
     {
@@ -12,7 +18,7 @@ public abstract class AbstractLevelController : MonoBehaviour
         set
         {
             _levelState = value;
-            OnLevelStateChanged(_levelState);
+            OnLevelStateChanged?.Invoke(_levelState);
         }
     }
 
@@ -22,12 +28,14 @@ public abstract class AbstractLevelController : MonoBehaviour
 
     void Awake()
     {
-        _levelManager = ServiceLocator.Current.Get<LevelManager>();    
+        _levelManager = ServiceLocator.Current.Get<LevelManager>();
     }
 }
 
 public enum LevelState
 {
-    RUNNING,
-    COMPLETE
+    SETUP,
+    RUN,
+    PAUSE,
+    FINISH
 }

@@ -34,6 +34,8 @@ public class EnemySpawner : MonoBehaviour
         }
     }
 
+    bool isSpawning = false;
+
     public event Action<int> OnObjectDestroyed;
     public event Action<int> OnObjectSpawned;
 
@@ -41,12 +43,14 @@ public class EnemySpawner : MonoBehaviour
     {
         InvokeRepeating(nameof(SpawnEnemy), 0f, spawnTime);
 
-        ServiceLocator.Current.Get<GameManager>().OnGameStateChanged +=
-            OnGameStateChange;
+        ServiceLocator.Current.Get<LevelManager>().OnLevelStateChanged +=
+            OnLevelStateChange;
     }
 
     void SpawnEnemy()
     {
+        if (!isSpawning) return;
+
         var prefab = Instantiate(enemyPrefab, 
             new Vector3(UnityEngine.Random.Range(-2f, 2f), transform.position.y, transform.position.z), 
             Quaternion.identity, 
@@ -55,12 +59,10 @@ public class EnemySpawner : MonoBehaviour
         prefab.GetComponent<EnemyBehavior>().OnDestruction += OnEnemyDestruction;
     }
 
-    private void OnGameStateChange(GameManager.GameState state)
+    private void OnLevelStateChange(LevelState state)
     {
-        if (state == GameManager.GameState.GAMEOVER)
-        {
-            gameObject.SetActive(false);
-        }
+        if (state == LevelState.RUN)
+            isSpawning = true;
     }
 
     void OnEnemyDestruction()

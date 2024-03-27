@@ -333,6 +333,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cc101845373b1f64fb247c1d64a9fa31, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  startingTime: 3
+  levelName: 1 - 1
 --- !u!4 &581372131
 Transform:
   m_ObjectHideFlags: 0

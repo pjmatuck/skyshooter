@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -19,6 +20,9 @@ public class LevelManager : MonoBehaviour, IGameService
             }
         }
     }
+
+    public event Action<LevelState> OnLevelStateChanged;
+
     AbstractLevelController _currentController;
     UIController _uiController;
 
@@ -47,16 +51,20 @@ public class LevelManager : MonoBehaviour, IGameService
     public void RegisterController(AbstractLevelController controller)
     {
         _currentController = controller;
+        _uiController.BlinkStageLabel(_currentController.StartingTime);
+        _uiController.SetLevelName(_currentController.LevelName);
         _currentController.OnLevelStateChanged += OnLevelStateChange;
     }
 
     public void OnLevelStateChange(LevelState state)
     {
-        if(state == LevelState.COMPLETE)
+        if(state == LevelState.FINISH)
         {
             UnloadCurrentScene();
             LoadNextLevel();
         }
+
+        OnLevelStateChanged?.Invoke(state);
     }
 
     private void OnEnable()

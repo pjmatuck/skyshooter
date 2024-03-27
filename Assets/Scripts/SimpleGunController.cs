@@ -20,6 +20,8 @@ public class SimpleGunController : MonoBehaviour
         {5, new int[] {0,1,2,3,4} }
     };
 
+    int _currentLevel = 1;
+
     void Awake()
     {
         _audioManager = ServiceLocator.Current.Get<AudioManager>();
@@ -29,8 +31,6 @@ public class SimpleGunController : MonoBehaviour
     {
         EnablePivot(_currentLevel);    
     }
-
-    int _currentLevel = 1;
 
     public void LevelUp()
     {
@@ -46,6 +46,11 @@ public class SimpleGunController : MonoBehaviour
 
         _currentLevel--;
         EnablePivot(_currentLevel);
+    }
+
+    public void Restore()
+    {
+        _currentLevel = 1;
     }
 
     private void EnablePivot(int level)

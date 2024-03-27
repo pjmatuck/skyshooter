@@ -28,6 +28,8 @@ public class PowerupSpawner : MonoBehaviour
         }
     }
 
+    bool isSpawning;
+
     public event Action<int> OnObjectCollected;
     public event Action<int> OnObjectSpawned;
 
@@ -35,12 +37,14 @@ public class PowerupSpawner : MonoBehaviour
     {
         InvokeRepeating(nameof(SpawnPowerUp), spawnTime, spawnTime);
 
-        ServiceLocator.Current.Get<GameManager>().OnGameStateChanged +=
+        ServiceLocator.Current.Get<LevelManager>().OnLevelStateChanged +=
             OnGameStateChange;
     }
 
     void SpawnPowerUp()
     {
+        if (!isSpawning) return;
+
         Vector3 position = new Vector3(
             UnityEngine.Random.Range(-2.5f, 2.5f),
             UnityEngine.Random.Range(0f, 5f),
@@ -51,12 +55,10 @@ public class PowerupSpawner : MonoBehaviour
         spawned++;
     }
 
-    private void OnGameStateChange(GameManager.GameState state)
+    private void OnGameStateChange(LevelState state)
     {
-        if (state == GameManager.GameState.GAMEOVER)
-        {
-            gameObject.SetActive(false);
-        }
+        if (state == LevelState.RUN)
+            isSpawning = true;
     }
 
     public void OnPowerUpCollected()

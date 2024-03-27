@@ -1,3 +1,4 @@
+using System.Collections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -8,6 +9,8 @@ public class UIController : MonoBehaviour, IGameService
     [SerializeField] TMP_Text gameOverCounter;
     [SerializeField] TMP_Text enemyKillCount;
     [SerializeField] GameObject[] playerHearts;
+    [SerializeField] GameObject stageLabel;
+    [SerializeField] TMP_Text levelName;
 
     int gameOverCounterValue = 3;
     int killCount = 0;
@@ -64,6 +67,29 @@ public class UIController : MonoBehaviour, IGameService
     {
         RestoreHP();
         RestoreKillCount();
+    }
+
+    public void BlinkStageLabel(float blinkTime)
+    {
+        StartCoroutine(BlinkLabel(blinkTime));
+    }
+
+    IEnumerator BlinkLabel(float blinkTime)
+    {
+        float time = 0f;
+        while(time < blinkTime)
+        {
+            var waitTime = blinkTime / 10;
+            stageLabel.SetActive(!stageLabel.activeSelf);
+            time += waitTime;
+            yield return new WaitForSeconds(waitTime);
+        }
+        stageLabel.SetActive(false);
+    }
+
+    public void SetLevelName(string name)
+    {
+        levelName.text = $"Stage {name}";
     }
 
     private void OnEnable()

@@ -5,6 +5,7 @@ public class Level01Controller : AbstractLevelController
 
     void Start()
     {
+
         _powerUpSpawner = FindAnyObjectByType<PowerupSpawner>();
         _powerUpSpawner.OnObjectCollected += OnPowerUpCollected;
 
@@ -13,7 +14,9 @@ public class Level01Controller : AbstractLevelController
 
         _levelManager.RegisterController(this);
 
-        LevelState = LevelState.RUNNING;
+        LevelState = LevelState.SETUP;
+
+        Invoke(nameof(Run), StartingTime);
     }
 
     void OnPowerUpCollected(int amount)
@@ -25,7 +28,11 @@ public class Level01Controller : AbstractLevelController
     {
         if (amount == 5)
         {
-            LevelState = LevelState.COMPLETE;
+            LevelState = LevelState.FINISH;
         }
+    }
+    void Run()
+    {
+        LevelState = LevelState.RUN;
     }
 }

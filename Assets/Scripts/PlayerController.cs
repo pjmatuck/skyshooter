@@ -12,6 +12,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] float blinkingInterval;
     [SerializeField] Transform gunPivot;
     [SerializeField] SimpleGunController gunController;
+    [SerializeField] PlayerStartEndAnimations startEndAnims;
 
     PlayerInput _playerInput;
     Rigidbody2D _rigidbody2D;
@@ -19,7 +20,6 @@ public class PlayerController : MonoBehaviour
     Vector2 direction;
     JoystickController _joystickController;
     UIController _uiController;
-    GameManager _gameManager;
     AchievementsManager _achievementsManager;
     int _playerHP = 3;
     PlayerState _currentState;
@@ -35,26 +35,20 @@ public class PlayerController : MonoBehaviour
 
         _joystickController = ServiceLocator.Current.Get<JoystickController>();
         _uiController = ServiceLocator.Current.Get<UIController>();
-        _gameManager = ServiceLocator.Current.Get<GameManager>();
+
+        ServiceLocator.Current.Get<LevelManager>().OnLevelStateChanged +=
+            OnLevelStateChange;
 
         gunController = Instantiate(gunController, gunPivot);
-
-        _gameManager.OnGameStateChanged += OnGameStateChange;
-
-        _currentState = PlayerState.NORMAL;
-
-        InvokeRepeating(nameof(Shoot), 0f, 1 / shootSpeedPerSec);
-
     }
 
     void Update()
     {
+        if (_currentState != PlayerState.NORMAL) return;
 
-#if UNITY_EDITOR
         moveX = Input.GetAxis("Horizontal");
         moveY = Input.GetAxis("Vertical");
         direction = new Vector2(moveX, moveY);
-#endif
 
         direction = _playerInput.actions["Move"].ReadValue<Vector2>();
 
@@ -71,6 +65,8 @@ public class PlayerController : MonoBehaviour
 
     public void Shoot()
     {
+        if(_currentState != PlayerState.NORMAL) return;
+
         gunController.Shoot();
     }
 
@@ -103,7 +99,7 @@ public class PlayerController : MonoBehaviour
 
     IEnumerator Blink()
     {
-        _currentState = PlayerState.BLINKING;
+        _currentState = PlayerState.BLINK;
 
         float timer = 0f;
         while(timer < blinkingTotalTime)
@@ -137,16 +133,7 @@ public class PlayerController : MonoBehaviour
         StopAllCoroutines();
         CancelInvoke();
         _uiController.GameOver();
-        _gameManager.SetState(GameManager.GameState.GAMEOVER);
         _animator.SetTrigger("explode");
-    }
-
-    private void OnGameStateChange(GameManager.GameState state)
-    {
-        if(state == GameManager.GameState.GAMEOVER)
-        {
-            
-        }
     }
 
     private void OnDisable()
@@ -160,9 +147,36 @@ public class PlayerController : MonoBehaviour
         gameObject.SetActive(false);
     }
 
+    private void OnLevelStateChange(LevelState state)
+    {
+        switch (state)
+        {
+            case LevelState.SETUP:
+                _currentState = PlayerState.ARRIVE;
+                startEndAnims.EntranceAnim();
+            break;
+            case LevelState.RUN:
+                _currentState = PlayerState.NORMAL;
+                InvokeRepeating(nameof(Shoot), 0f, 1 / shootSpeedPerSec);
+            break;
+            case LevelState.PAUSE:
+            break;
+            case LevelState.FINISH:
+                RestorePlayer();
+            break;
+        }
+
+    }
+
+    void RestorePlayer()
+    {
+        gunController.Restore();
+    }
+
     enum PlayerState
     {
-        BLINKING,
+        ARRIVE,
+        BLINK,
         NORMAL
     }
 }
