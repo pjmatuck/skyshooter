@@ -51,17 +51,22 @@ public class LevelManager : MonoBehaviour, IGameService
     public void RegisterController(AbstractLevelController controller)
     {
         _currentController = controller;
-        _uiController.BlinkStageLabel(_currentController.StartingTime);
+        _uiController.BlinkStartStageLabel(_currentController.StartingTime);
         _uiController.SetLevelName(_currentController.LevelName);
         _currentController.OnLevelStateChanged += OnLevelStateChange;
     }
 
     public void OnLevelStateChange(LevelState state)
     {
-        if(state == LevelState.FINISH)
+        switch (state)
         {
-            UnloadCurrentScene();
-            LoadNextLevel();
+            case LevelState.COMPLETE:
+                _uiController.BlinkStageClearLabel(_currentController.CompletionTime);
+            break;
+            case LevelState.DISASSEMBLE: 
+                UnloadCurrentScene();
+                LoadNextLevel();
+            break; 
         }
 
         OnLevelStateChanged?.Invoke(state);

@@ -14,7 +14,6 @@ public class EnemyBehavior : MonoBehaviour
     UIController _uiController;
     AudioManager _audioManager;
     Animator _animator;
-    AchievementsManager _achievementsManager;
 
     EnemyState _state;
 
@@ -28,7 +27,20 @@ public class EnemyBehavior : MonoBehaviour
         _uiController = ServiceLocator.Current.Get<UIController>();
         _audioManager = ServiceLocator.Current.Get<AudioManager>();
 
+        ServiceLocator.Current.Get<LevelManager>().OnLevelStateChanged +=
+            OnLevelStateChange;
+
         StartCoroutine(Shoot());
+    }
+
+    private void OnLevelStateChange(LevelState state)
+    {
+        switch (state)
+        {
+            case LevelState.COMPLETE:
+                SelfDestroy();
+                break;
+        }
     }
 
     private void FixedUpdate()
@@ -73,6 +85,8 @@ public class EnemyBehavior : MonoBehaviour
 
     private void OnDisable()
     {
+        ServiceLocator.Current.Get<LevelManager>().OnLevelStateChanged -=
+            OnLevelStateChange;
         StopAllCoroutines();
     }
 

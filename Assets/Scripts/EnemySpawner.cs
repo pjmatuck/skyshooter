@@ -61,8 +61,15 @@ public class EnemySpawner : MonoBehaviour
 
     private void OnLevelStateChange(LevelState state)
     {
-        if (state == LevelState.RUN)
-            isSpawning = true;
+        switch (state)
+        {
+            case LevelState.RUN:
+                isSpawning = true;
+                break;
+            case LevelState.COMPLETE:
+                isSpawning = false;
+                break;
+        }
     }
 
     void OnEnemyDestruction()

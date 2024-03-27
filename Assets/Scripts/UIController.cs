@@ -9,8 +9,9 @@ public class UIController : MonoBehaviour, IGameService
     [SerializeField] TMP_Text gameOverCounter;
     [SerializeField] TMP_Text enemyKillCount;
     [SerializeField] GameObject[] playerHearts;
-    [SerializeField] GameObject stageLabel;
+    [SerializeField] GameObject startStageLabel;
     [SerializeField] TMP_Text levelName;
+    [SerializeField] GameObject stageClearLabel;
 
     int gameOverCounterValue = 3;
     int killCount = 0;
@@ -69,22 +70,27 @@ public class UIController : MonoBehaviour, IGameService
         RestoreKillCount();
     }
 
-    public void BlinkStageLabel(float blinkTime)
+    public void BlinkStartStageLabel(float blinkTime)
     {
-        StartCoroutine(BlinkLabel(blinkTime));
+        StartCoroutine(BlinkLabel(startStageLabel, blinkTime));
     }
 
-    IEnumerator BlinkLabel(float blinkTime)
+    public void BlinkStageClearLabel(float blinkTime)
+    {
+        StartCoroutine(BlinkLabel(stageClearLabel, blinkTime));
+    }
+
+    IEnumerator BlinkLabel(GameObject label, float blinkTime)
     {
         float time = 0f;
         while(time < blinkTime)
         {
             var waitTime = blinkTime / 10;
-            stageLabel.SetActive(!stageLabel.activeSelf);
+            label.SetActive(!label.activeSelf);
             time += waitTime;
             yield return new WaitForSeconds(waitTime);
         }
-        stageLabel.SetActive(false);
+        label.SetActive(false);
     }
 
     public void SetLevelName(string name)

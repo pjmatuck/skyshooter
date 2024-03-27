@@ -7,8 +7,10 @@ public abstract class AbstractLevelController : MonoBehaviour
 {
     [SerializeField] float startingTime;
     [SerializeField] string levelName;
+    [SerializeField] float completionTime;
 
     public float StartingTime => startingTime;
+    public float CompletionTime => completionTime;
     public string LevelName => levelName;
 
     LevelState _levelState;
@@ -34,8 +36,9 @@ public abstract class AbstractLevelController : MonoBehaviour
 
 public enum LevelState
 {
-    SETUP,
+    ASSEMBLE,
     RUN,
     PAUSE,
-    FINISH
+    COMPLETE,
+    DISASSEMBLE
 }

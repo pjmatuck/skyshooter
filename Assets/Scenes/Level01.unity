@@ -335,6 +335,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   startingTime: 3
   levelName: 1 - 1
+  completionTime: 2
 --- !u!4 &581372131
 Transform:
   m_ObjectHideFlags: 0

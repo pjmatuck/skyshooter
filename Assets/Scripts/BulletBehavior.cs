@@ -9,7 +9,10 @@ public class BulletBehavior : MonoBehaviour
 
     void Start()
     {
-        Invoke(nameof(SelfDestoy), timeSpan);
+        Invoke(nameof(SelfDestroy), timeSpan);
+
+        ServiceLocator.Current.Get<LevelManager>().OnLevelStateChanged +=
+            OnLevelStateChange;
     }
 
     void Update()
@@ -17,8 +20,25 @@ public class BulletBehavior : MonoBehaviour
         transform.Translate(Vector2.up * speed * Time.deltaTime);    
     }
 
-    void SelfDestoy()
+    private void OnLevelStateChange(LevelState state)
     {
-        Destroy(gameObject);
+        switch (state)
+        {
+            case LevelState.COMPLETE:
+                SelfDestroy();
+                break;
+        }
+    }
+
+    void SelfDestroy()
+    {
+        if(gameObject != null)
+            Destroy(gameObject);
+    }
+
+    void OnDisable()
+    {
+        ServiceLocator.Current.Get<LevelManager>().OnLevelStateChanged -=
+            OnLevelStateChange;
     }
 }

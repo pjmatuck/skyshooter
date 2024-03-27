@@ -14,7 +14,7 @@ public class Level01Controller : AbstractLevelController
 
         _levelManager.RegisterController(this);
 
-        LevelState = LevelState.SETUP;
+        LevelState = LevelState.ASSEMBLE;
 
         Invoke(nameof(Run), StartingTime);
     }
@@ -28,11 +28,17 @@ public class Level01Controller : AbstractLevelController
     {
         if (amount == 5)
         {
-            LevelState = LevelState.FINISH;
+            LevelState = LevelState.COMPLETE;
+            Invoke(nameof(Disassemble), CompletionTime);
         }
     }
     void Run()
     {
         LevelState = LevelState.RUN;
+    }
+
+    void Disassemble()
+    {
+        LevelState = LevelState.DISASSEMBLE;
     }
 }

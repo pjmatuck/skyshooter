@@ -3,7 +3,7 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class PlayerController : MonoBehaviour
+public class PlayerController : MonoBehaviour, IGameService
 {
     [SerializeField] float speed;
     [SerializeField] GameObject bullet;
@@ -29,7 +29,7 @@ public class PlayerController : MonoBehaviour
 
     void Start()
     {
-        _currentState = LevelState.SETUP;
+        _currentState = LevelState.ASSEMBLE;
 
         _playerInput = GetComponent<PlayerInput>();
         _rigidbody2D = GetComponent<Rigidbody2D>();
@@ -142,8 +142,14 @@ public class PlayerController : MonoBehaviour
         _animator.SetTrigger("explode");
     }
 
-    private void OnDisable()
+    void OnEnable()
     {
+        ServiceLocator.Current.Register(this);
+    }
+
+    void OnDisable()
+    {
+        ServiceLocator.Current.Unregister(this);
         CancelInvoke();
     }
 
@@ -159,7 +165,7 @@ public class PlayerController : MonoBehaviour
 
         switch (state)
         {
-            case LevelState.SETUP:
+            case LevelState.ASSEMBLE:
                 startEndAnims.EntranceAnim();
             break;
             case LevelState.RUN:
@@ -167,17 +173,19 @@ public class PlayerController : MonoBehaviour
             break;
             case LevelState.PAUSE:
             break;
-            case LevelState.FINISH:
+            case LevelState.COMPLETE:
+                CancelInvoke(nameof(Shoot));
+                startEndAnims.ExitAnim();
+            break;
+            case LevelState.DISASSEMBLE:
                 RestorePlayer();
             break;
         }
-
     }
 
     void RestorePlayer()
     {
         gunController.Restore();
-        CancelInvoke(nameof(Shoot));
         direction = Vector2.zero;
         _playerHP = 3;
     }
