@@ -22,12 +22,15 @@ public class PlayerController : MonoBehaviour
     UIController _uiController;
     AchievementsManager _achievementsManager;
     int _playerHP = 3;
-    PlayerState _currentState;
+    LevelState _currentState;
     SpriteRenderer _spriteRenderer;
     Animator _animator;
+    bool isInvulnerable = false;
 
     void Start()
     {
+        _currentState = LevelState.SETUP;
+
         _playerInput = GetComponent<PlayerInput>();
         _rigidbody2D = GetComponent<Rigidbody2D>();
         _spriteRenderer = GetComponent<SpriteRenderer>();
@@ -44,7 +47,7 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
-        if (_currentState != PlayerState.NORMAL) return;
+        if (_currentState != LevelState.RUN) return;
 
         moveX = Input.GetAxis("Horizontal");
         moveY = Input.GetAxis("Vertical");
@@ -65,7 +68,7 @@ public class PlayerController : MonoBehaviour
 
     public void Shoot()
     {
-        if(_currentState != PlayerState.NORMAL) return;
+        if(_currentState != LevelState.RUN) return;
 
         gunController.Shoot();
     }
@@ -83,7 +86,10 @@ public class PlayerController : MonoBehaviour
             Destroy(collision.gameObject);
         }
 
-        if (_currentState != PlayerState.NORMAL)
+        if (_currentState != LevelState.RUN)
+            return;
+
+        if (isInvulnerable)
             return;
 
         if (collision.CompareTag("Enemy"))
@@ -99,7 +105,7 @@ public class PlayerController : MonoBehaviour
 
     IEnumerator Blink()
     {
-        _currentState = PlayerState.BLINK;
+        isInvulnerable = true;
 
         float timer = 0f;
         while(timer < blinkingTotalTime)
@@ -111,7 +117,7 @@ public class PlayerController : MonoBehaviour
 
         _spriteRenderer.enabled = true;
 
-        _currentState = PlayerState.NORMAL;
+        isInvulnerable = false;
     }
 
     private void GetDamage()
@@ -149,14 +155,14 @@ public class PlayerController : MonoBehaviour
 
     private void OnLevelStateChange(LevelState state)
     {
+        _currentState = state;
+
         switch (state)
         {
             case LevelState.SETUP:
-                _currentState = PlayerState.ARRIVE;
                 startEndAnims.EntranceAnim();
             break;
             case LevelState.RUN:
-                _currentState = PlayerState.NORMAL;
                 InvokeRepeating(nameof(Shoot), 0f, 1 / shootSpeedPerSec);
             break;
             case LevelState.PAUSE:
@@ -171,12 +177,8 @@ public class PlayerController : MonoBehaviour
     void RestorePlayer()
     {
         gunController.Restore();
-    }
-
-    enum PlayerState
-    {
-        ARRIVE,
-        BLINK,
-        NORMAL
+        CancelInvoke(nameof(Shoot));
+        direction = Vector2.zero;
+        _playerHP = 3;
     }
 }

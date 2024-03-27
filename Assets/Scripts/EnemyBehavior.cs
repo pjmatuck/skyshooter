@@ -65,6 +65,7 @@ public class EnemyBehavior : MonoBehaviour
             _animator.SetTrigger("explode");
             gameObject.tag = "Untagged";
             _uiController.IncreaseKillCount();
+            StopAllCoroutines();
             _state = EnemyState.EXPLODING;
             OnDestruction();
         }
@@ -72,7 +73,6 @@ public class EnemyBehavior : MonoBehaviour
 
     private void OnDisable()
     {
-        CancelInvoke();
         StopAllCoroutines();
     }
 
