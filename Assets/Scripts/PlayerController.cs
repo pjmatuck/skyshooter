@@ -82,7 +82,9 @@ public class PlayerController : MonoBehaviour, IGameService
     {
         if (collision.CompareTag("Powerup"))
         {
-            gunController.LevelUp();
+            if(gunController.LevelUp())
+                _uiController.IncreasePowerUP();
+
             Destroy(collision.gameObject);
         }
 

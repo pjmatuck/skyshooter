@@ -12,10 +12,12 @@ public class UIController : MonoBehaviour, IGameService
     [SerializeField] GameObject startStageLabel;
     [SerializeField] TMP_Text levelName;
     [SerializeField] GameObject stageClearLabel;
+    [SerializeField] TMP_Text powerUpIndicator;
 
     int gameOverCounterValue = 3;
     int killCount = 0;
     int playerHp = 3;
+    int powerUp = 1;
 
     public void GameOver()
     {
@@ -43,6 +45,12 @@ public class UIController : MonoBehaviour, IGameService
         enemyKillCount.text = killCount.ToString();
     }
 
+    public void IncreasePowerUP()
+    {
+        powerUp++;
+        powerUpIndicator.text = powerUp.ToString();
+    }
+
     public void DecreaseHP()
     {
         playerHp--;
@@ -64,10 +72,17 @@ public class UIController : MonoBehaviour, IGameService
         }
     }
 
+    public void RestorePowerUP()
+    {
+        powerUp = 1;
+        powerUpIndicator.text = powerUp.ToString();
+    }
+
     public void RestoreUI()
     {
         RestoreHP();
         RestoreKillCount();
+        RestorePowerUP();
     }
 
     public void BlinkStartStageLabel(float blinkTime)

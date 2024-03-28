@@ -32,12 +32,14 @@ public class SimpleGunController : MonoBehaviour
         EnablePivot(_currentLevel);    
     }
 
-    public void LevelUp()
+    public bool LevelUp()
     {
-        if (_currentLevel == levelPivotsMap.Count) return;
+        if (_currentLevel == levelPivotsMap.Count) return false;
 
         _currentLevel++;
         EnablePivot(_currentLevel);
+
+        return true;
     }
 
     public void LevelDown()
