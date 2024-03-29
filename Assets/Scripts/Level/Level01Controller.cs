@@ -26,7 +26,7 @@ public class Level01Controller : AbstractLevelController
 
     void OnEnemyDestroyed(int amount)
     {
-        if (amount == 5)
+        if (amount == 10)
         {
             LevelState = LevelState.COMPLETE;
             Invoke(nameof(Disassemble), CompletionTime);

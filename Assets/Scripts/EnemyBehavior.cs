@@ -9,6 +9,7 @@ public class EnemyBehavior : MonoBehaviour
     [SerializeField][Tooltip("In seconds")] float maxTimeToShoot;
     [SerializeField] float startShootingCooldown;
     [SerializeField] AudioClip explosionSFX;
+    [SerializeField] LootController lootController;
 
     GunController _gun;
     UIController _uiController;
@@ -79,6 +80,7 @@ public class EnemyBehavior : MonoBehaviour
             _uiController.IncreaseKillCount();
             StopAllCoroutines();
             _state = EnemyState.EXPLODING;
+            DropItem();
             OnDestruction();
         }
     }
@@ -93,6 +95,17 @@ public class EnemyBehavior : MonoBehaviour
     public void AnimExplosionEnds()
     {
         SelfDestroy();
+    }
+
+    void DropItem()
+    {
+        var item = lootController.Drop();
+
+        if (item == null) return;
+
+        Instantiate(item, 
+            new Vector3(transform.position.x, transform.position.y, transform.position.z), 
+            Quaternion.identity);
     }
 }
 

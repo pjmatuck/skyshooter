@@ -88,6 +88,14 @@ public class PlayerController : MonoBehaviour, IGameService
             Destroy(collision.gameObject);
         }
 
+        if (collision.CompareTag("Heal"))
+        {
+            if (_playerHP == 3) return;
+            _playerHP++;
+            _uiController.IncreaseHP();
+            Destroy(collision.gameObject);
+        }
+
         if (_currentState != LevelState.RUN)
             return;
 

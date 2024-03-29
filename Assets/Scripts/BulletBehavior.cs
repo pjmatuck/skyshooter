@@ -38,7 +38,8 @@ public class BulletBehavior : MonoBehaviour
 
     void OnDisable()
     {
-        ServiceLocator.Current.Get<LevelManager>().OnLevelStateChanged -=
-            OnLevelStateChange;
+        if(ServiceLocator.Current != null)
+            ServiceLocator.Current.Get<LevelManager>().OnLevelStateChanged -=
+                OnLevelStateChange;
     }
 }

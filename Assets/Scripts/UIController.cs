@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using TMPro;
 using UnityEngine;
@@ -123,5 +124,12 @@ public class UIController : MonoBehaviour, IGameService
     {
         if (ServiceLocator.Current != null)
             ServiceLocator.Current.Unregister(this);
+    }
+
+    internal void IncreaseHP()
+    {
+        if (playerHp == 3) return;
+        playerHp++;
+        playerHearts[playerHp-1].gameObject.SetActive(true);
     }
 }
