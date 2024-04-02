@@ -109,11 +109,15 @@ public class PlayerController : MonoBehaviour, IGameService
         if (collision.CompareTag("Enemy"))
         {
             GetDamage();
+            Destroy(collision.gameObject);
         }
 
         if (collision.CompareTag("EnemyBullet"))
         {
-            GetDamage();
+            if(!shield.activeSelf)
+                GetDamage();
+
+            Destroy(collision.gameObject);
         }
     }
 
