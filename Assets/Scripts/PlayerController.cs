@@ -16,6 +16,7 @@ public class PlayerController : MonoBehaviour, IGameService
     [SerializeField] GameObject shield;
     [SerializeField] float shieldTime;
     [SerializeField] float shieldCooldown;
+    [SerializeField] AudioSource audioSource;
 
     PlayerInput _playerInput;
     Rigidbody2D _rigidbody2D;
@@ -141,6 +142,7 @@ public class PlayerController : MonoBehaviour, IGameService
     private void GetDamage()
     {
         _playerHP--;
+        audioSource.Play();
         if (_playerHP == 0)
         {
             GameOver();
