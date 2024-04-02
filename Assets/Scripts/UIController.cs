@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Runtime.InteropServices;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -16,6 +17,11 @@ public class UIController : MonoBehaviour, IGameService
     [SerializeField] GameObject stageClearLabel;
     [SerializeField] TMP_Text powerUpIndicator;
     [SerializeField] Slider shieldTimer;
+    [SerializeField] GameObject hitEffect;
+    [SerializeField] float hitEffectDuration;
+
+    [DllImport("__Internal")]
+    private static extern void Vibrate(int ms);
 
     int gameOverCounterValue = 3;
     int killCount = 0;
@@ -151,5 +157,22 @@ public class UIController : MonoBehaviour, IGameService
             time += tickRate;
             yield return new WaitForSeconds(tickRate);
         }
+    }
+
+    public void EnableHitEffect()
+    {
+        StartCoroutine(HitEffect());
+    }
+
+    IEnumerator HitEffect()
+    {
+        hitEffect.SetActive(true);
+#if !UNITY_EDITOR && UNITY_WEBGL
+        Vibrate(200);
+#else
+        Debug.Log("Simulate vibration");
+#endif
+        yield return new WaitForSeconds(hitEffectDuration);
+        hitEffect.SetActive(false);
     }
 }

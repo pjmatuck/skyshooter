@@ -147,6 +147,7 @@ public class PlayerController : MonoBehaviour, IGameService
         }
         else
         {
+            _uiController.EnableHitEffect();
             _uiController.DecreaseHP();
             StartCoroutine(Blink());
         }
