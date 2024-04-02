@@ -41,6 +41,7 @@ public class LevelManager : MonoBehaviour, IGameService
         _uiController.RestoreUI();
         CurrentScene++;
         SceneManager.LoadScene(scenes[_currentScene], LoadSceneMode.Additive);
+
     }
 
     void UnloadCurrentScene()
@@ -78,7 +79,7 @@ public class LevelManager : MonoBehaviour, IGameService
             ServiceLocator.Current.Register(this);
     }
 
-    private void OnDisable()
+    private void OnDestroy()
     {
         if (ServiceLocator.Current != null)
             ServiceLocator.Current.Unregister(this);

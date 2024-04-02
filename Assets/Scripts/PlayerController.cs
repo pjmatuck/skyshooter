@@ -13,6 +13,9 @@ public class PlayerController : MonoBehaviour, IGameService
     [SerializeField] Transform gunPivot;
     [SerializeField] SimpleGunController gunController;
     [SerializeField] PlayerStartEndAnimations startEndAnims;
+    [SerializeField] GameObject shield;
+    [SerializeField] float shieldTime;
+    [SerializeField] float shieldCooldown;
 
     PlayerInput _playerInput;
     Rigidbody2D _rigidbody2D;
@@ -26,6 +29,7 @@ public class PlayerController : MonoBehaviour, IGameService
     SpriteRenderer _spriteRenderer;
     Animator _animator;
     bool isInvulnerable = false;
+    bool canUseShield = true;
 
     void Start()
     {
@@ -198,5 +202,34 @@ public class PlayerController : MonoBehaviour, IGameService
         gunController.Restore();
         direction = Vector2.zero;
         _playerHP = 3;
+    }
+
+    public void StartShield()
+    {
+        if (!canUseShield) return;
+
+        canUseShield = false;
+        StartCoroutine(EnableShield());
+        _uiController.StartShieldCoolDown(shieldCooldown);
+        Invoke(nameof(AllowShield), shieldCooldown);
+    }
+
+    public IEnumerator EnableShield()
+    {
+        float time = 0;
+
+        while(time < shieldTime)
+        {
+            shield.SetActive(true);
+            yield return null;
+            time += Time.deltaTime;
+        }
+
+        shield.SetActive(false);
+    }
+
+    void AllowShield()
+    {
+        canUseShield = true;
     }
 }

@@ -3,6 +3,7 @@ using System.Collections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class UIController : MonoBehaviour, IGameService
 {
@@ -14,6 +15,7 @@ public class UIController : MonoBehaviour, IGameService
     [SerializeField] TMP_Text levelName;
     [SerializeField] GameObject stageClearLabel;
     [SerializeField] TMP_Text powerUpIndicator;
+    [SerializeField] Slider shieldTimer;
 
     int gameOverCounterValue = 3;
     int killCount = 0;
@@ -131,5 +133,23 @@ public class UIController : MonoBehaviour, IGameService
         if (playerHp == 3) return;
         playerHp++;
         playerHearts[playerHp-1].gameObject.SetActive(true);
+    }
+
+    public void StartShieldCoolDown(float time)
+    {
+        StartCoroutine(ShieldCooldown(time));
+    }
+
+    IEnumerator ShieldCooldown(float duration)
+    {
+        float time = 0;
+        float tickRate = duration / 100;
+        shieldTimer.value = 0;
+        while(time < duration)
+        {
+            shieldTimer.value += (100/duration) * tickRate;
+            time += tickRate;
+            yield return new WaitForSeconds(tickRate);
+        }
     }
 }
