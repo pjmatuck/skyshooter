@@ -16,7 +16,7 @@ public class PlayerController : MonoBehaviour, IGameService
     [SerializeField] GameObject shield;
     [SerializeField] float shieldTime;
     [SerializeField] float shieldCooldown;
-    [SerializeField] AudioSource audioSource;
+    [SerializeField] AudioClip takeHitSFX;
 
     PlayerInput _playerInput;
     Rigidbody2D _rigidbody2D;
@@ -29,6 +29,7 @@ public class PlayerController : MonoBehaviour, IGameService
     LevelState _currentState;
     SpriteRenderer _spriteRenderer;
     Animator _animator;
+    AudioManager _audioManager;
     bool isInvulnerable = false;
     bool canUseShield = true;
 
@@ -43,6 +44,7 @@ public class PlayerController : MonoBehaviour, IGameService
 
         _joystickController = ServiceLocator.Current.Get<JoystickController>();
         _uiController = ServiceLocator.Current.Get<UIController>();
+        _audioManager = ServiceLocator.Current.Get<AudioManager>();
 
         ServiceLocator.Current.Get<LevelManager>().OnLevelStateChanged +=
             OnLevelStateChange;
@@ -142,7 +144,7 @@ public class PlayerController : MonoBehaviour, IGameService
     private void GetDamage()
     {
         _playerHP--;
-        audioSource.Play();
+        _audioManager.PlaySFX(takeHitSFX);
         if (_playerHP == 0)
         {
             GameOver();

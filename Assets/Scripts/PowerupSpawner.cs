@@ -30,6 +30,8 @@ public class PowerupSpawner : MonoBehaviour
 
     bool isSpawning;
 
+    Transform _pool;
+
     public event Action<int> OnObjectCollected;
     public event Action<int> OnObjectSpawned;
 
@@ -39,6 +41,8 @@ public class PowerupSpawner : MonoBehaviour
 
         ServiceLocator.Current.Get<LevelManager>().OnLevelStateChanged +=
             OnGameStateChange;
+
+        _pool = GameObject.Find("-- Pool --").transform;
     }
 
     void SpawnPowerUp()
@@ -50,7 +54,7 @@ public class PowerupSpawner : MonoBehaviour
             UnityEngine.Random.Range(0f, 5f),
             0f);
 
-        var powerUp = Instantiate(powerupPrefab, position, Quaternion.identity);
+        var powerUp = Instantiate(powerupPrefab, position, Quaternion.identity, _pool);
         powerUp.GetComponent<PowerupBehavior>().OnPowerupCollected += OnPowerUpCollected;
         spawned++;
     }

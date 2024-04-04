@@ -40,11 +40,12 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 166169079753803888}
-  - component: {fileID: 1283413067692625801}
   - component: {fileID: 8005197678989908987}
+  - component: {fileID: -85546758415679329}
+  - component: {fileID: 5236150034273626178}
+  - component: {fileID: 1283413067692625801}
   - component: {fileID: -1619210799208508031}
   - component: {fileID: 6231890584645273762}
-  - component: {fileID: 5236150034273626178}
   - component: {fileID: -3718744660340954789}
   - component: {fileID: 7451129013660067565}
   m_Layer: 0
@@ -70,6 +71,51 @@ Transform:
   - {fileID: 6101382459928816534}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &8005197678989908987
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8760745932645833918}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a78e058abbbcc3c46b6a1daa138674e9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  minTimeToShoot: 1
+  maxTimeToShoot: 3
+  startShootingCooldown: 2
+  explosionSFX: {fileID: 8300000, guid: 72739380e49665e4e98bbc2b0a405743, type: 3}
+  lootController: {fileID: 7451129013660067565}
+--- !u!114 &-85546758415679329
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8760745932645833918}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a18cdbe2e8ff75c4c898baed05bacd65, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  speed: 3
+--- !u!114 &5236150034273626178
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8760745932645833918}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 73ec0f691fdcc7b48ae01c95e9f45cba, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gunPivot: {fileID: 6101382459928816534}
+  projectile: {fileID: 6753339710792713598, guid: 275053b90748c7a4a8151e7ee064d236, type: 3}
+  inverseDirection: 1
 --- !u!212 &1283413067692625801
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -122,24 +168,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &8005197678989908987
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8760745932645833918}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a78e058abbbcc3c46b6a1daa138674e9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  speed: 2
-  minTimeToShoot: 1
-  maxTimeToShoot: 3
-  startShootingCooldown: 2
-  explosionSFX: {fileID: 8300000, guid: 72739380e49665e4e98bbc2b0a405743, type: 3}
-  lootController: {fileID: 7451129013660067565}
 --- !u!50 &-1619210799208508031
 Rigidbody2D:
   serializedVersion: 4
@@ -202,21 +230,6 @@ CircleCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Radius: 0.3
---- !u!114 &5236150034273626178
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8760745932645833918}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 73ec0f691fdcc7b48ae01c95e9f45cba, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  gunPivot: {fileID: 6101382459928816534}
-  projectile: {fileID: 6753339710792713598, guid: 275053b90748c7a4a8151e7ee064d236, type: 3}
-  inverseDirection: 1
 --- !u!95 &-3718744660340954789
 Animator:
   serializedVersion: 5

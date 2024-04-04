@@ -52,7 +52,7 @@ public class EnemySpawner : MonoBehaviour
         if (!isSpawning) return;
 
         var prefab = Instantiate(enemyPrefab, 
-            new Vector3(UnityEngine.Random.Range(-2f, 2f), transform.position.y, transform.position.z), 
+            new Vector3(UnityEngine.Random.Range(-3f, 3f), transform.position.y, transform.position.z), 
             Quaternion.identity, 
             transform);
         Spawned++;

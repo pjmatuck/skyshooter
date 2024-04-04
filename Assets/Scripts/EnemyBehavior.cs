@@ -3,8 +3,7 @@ using System.Collections;
 using UnityEngine;
 
 public class EnemyBehavior : MonoBehaviour
-{
-    [SerializeField] float speed;
+{ 
     [SerializeField][Tooltip("In seconds")] float minTimeToShoot;
     [SerializeField][Tooltip("In seconds")] float maxTimeToShoot;
     [SerializeField] float startShootingCooldown;
@@ -46,8 +45,6 @@ public class EnemyBehavior : MonoBehaviour
 
     private void FixedUpdate()
     {
-        transform.Translate(Vector2.down * speed * Time.fixedDeltaTime);
-
         if(transform.position.y < -10)
             SelfDestroy();
     }
