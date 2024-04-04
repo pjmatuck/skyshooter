@@ -6,6 +6,8 @@ public class BulletBehavior : MonoBehaviour
 {
     [SerializeField] float speed;
     [SerializeField] float timeSpan;
+    [SerializeField] bool randomizeSpeed;
+    [SerializeField][Range(1,2)] float randomFactor;
 
     void Start()
     {
@@ -13,11 +15,15 @@ public class BulletBehavior : MonoBehaviour
 
         ServiceLocator.Current.Get<LevelManager>().OnLevelStateChanged +=
             OnLevelStateChange;
+
+        speed = randomizeSpeed
+            ? Random.Range(speed, speed * randomFactor)
+            : speed;
     }
 
-    void Update()
+    void FixedUpdate()
     {
-        transform.Translate(Vector2.up * speed * Time.deltaTime);    
+        transform.Translate(Vector2.up * speed * Time.fixedDeltaTime);    
     }
 
     private void OnLevelStateChange(LevelState state)
