@@ -6,7 +6,6 @@ public class GunController : MonoBehaviour
 {
     [SerializeField] Transform gunPivot;
     [SerializeField] GameObject projectile;
-    [SerializeField] bool inverseDirection;
 
     Transform _pool;
 
@@ -19,8 +18,8 @@ public class GunController : MonoBehaviour
     {
         Instantiate(
             projectile,
-            new Vector3(gunPivot.position.x, gunPivot.position.y, gunPivot.position.z),
-            inverseDirection ? Quaternion.Euler(0f, 0f, 180f) : Quaternion.identity,
+            gunPivot.position,
+            transform.rotation,
             _pool);
     }
 }

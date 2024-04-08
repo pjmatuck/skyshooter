@@ -53,7 +53,7 @@ public class EnemySpawner : MonoBehaviour
 
         var prefab = Instantiate(enemyPrefab, 
             new Vector3(UnityEngine.Random.Range(-3f, 3f), transform.position.y, transform.position.z), 
-            Quaternion.identity, 
+            enemyPrefab.transform.rotation, 
             transform);
         Spawned++;
         prefab.GetComponent<EnemyBehavior>().OnDestruction += OnEnemyDestruction;

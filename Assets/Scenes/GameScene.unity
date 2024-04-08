@@ -1693,6 +1693,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b458dc4e042009843abef945fd2644fa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  obj: {fileID: 8760745932645833918, guid: a031a9332943c8a4aa55712c677eca5e, type: 3}
 --- !u!4 &532646431
 Transform:
   m_ObjectHideFlags: 0
@@ -4562,6 +4563,10 @@ PrefabInstance:
     - target: {fileID: 3561571323711975886, guid: e19b23cdb98e8a14f8f1dcb3088d437e, type: 3}
       propertyPath: m_Name
       value: Player
+      objectReference: {fileID: 0}
+    - target: {fileID: 4488942898938878296, guid: e19b23cdb98e8a14f8f1dcb3088d437e, type: 3}
+      propertyPath: m_Enabled
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 9090577884472631967, guid: e19b23cdb98e8a14f8f1dcb3088d437e, type: 3}
       propertyPath: endPivot
