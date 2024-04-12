@@ -264,5 +264,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   lootItems:
   - Item: {fileID: 2023973760236937957, guid: 9d542104cab36aa45bced9a38e3eab3b, type: 3}
-    DropRate: 50
+    DropRate: 10
   normalize: 0

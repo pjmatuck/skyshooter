@@ -78,7 +78,10 @@ public class SimpleGunController : MonoBehaviour
         {
             if (p.gameObject.activeSelf)
             {
-                Instantiate(bullet, p.position, Quaternion.identity);
+                Instantiate(bullet, 
+                    p.position, 
+                    Quaternion.identity, 
+                    ServiceLocator.Current.Get<PoolManager>().PoolTransform);
             }
         }
     }

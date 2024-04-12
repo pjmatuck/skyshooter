@@ -30,10 +30,10 @@ public class PowerupSpawner : MonoBehaviour
 
     bool isSpawning;
 
-    Transform _pool;
-
     public event Action<int> OnObjectCollected;
     public event Action<int> OnObjectSpawned;
+
+    Transform _pool;
 
     void Start()
     {
@@ -42,7 +42,7 @@ public class PowerupSpawner : MonoBehaviour
         ServiceLocator.Current.Get<LevelManager>().OnLevelStateChanged +=
             OnGameStateChange;
 
-        _pool = GameObject.Find("-- Pool --").transform;
+        _pool = ServiceLocator.Current.Get<PoolManager>().PoolTransform;
     }
 
     void SpawnPowerUp()

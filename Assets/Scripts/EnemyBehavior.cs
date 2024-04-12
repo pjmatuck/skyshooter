@@ -19,6 +19,8 @@ public class EnemyBehavior : MonoBehaviour
 
     public event Action OnDestruction;
 
+    Transform _pool;
+
     void Start()
     {
         _gun = GetComponent<GunController>();
@@ -29,6 +31,8 @@ public class EnemyBehavior : MonoBehaviour
 
         ServiceLocator.Current.Get<LevelManager>().OnLevelStateChanged +=
             OnLevelStateChange;
+
+        _pool = ServiceLocator.Current.Get<PoolManager>().PoolTransform;
 
         StartCoroutine(Shoot());
     }
@@ -102,7 +106,8 @@ public class EnemyBehavior : MonoBehaviour
 
         Instantiate(item, 
             new Vector3(transform.position.x, transform.position.y, transform.position.z), 
-            Quaternion.identity);
+            Quaternion.identity,
+            _pool);
     }
 }
 

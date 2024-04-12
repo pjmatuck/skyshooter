@@ -42,7 +42,7 @@ public class BulletBehavior : MonoBehaviour
             Destroy(gameObject);
     }
 
-    void OnDisable()
+    void OnDestroy()
     {
         if(ServiceLocator.Current != null)
             ServiceLocator.Current.Get<LevelManager>().OnLevelStateChanged -=

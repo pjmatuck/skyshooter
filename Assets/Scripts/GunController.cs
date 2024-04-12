@@ -11,7 +11,7 @@ public class GunController : MonoBehaviour
 
     private void Start()
     {
-        _pool = GameObject.Find("-- Pool --").transform;
+        _pool = ServiceLocator.Current.Get<PoolManager>().PoolTransform;
     }
 
     public void Shoot()

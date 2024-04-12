@@ -1,5 +1,6 @@
 
 using System.Collections;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -32,6 +33,8 @@ public class PlayerController : MonoBehaviour, IGameService
     AudioManager _audioManager;
     bool isInvulnerable = false;
     bool canUseShield = true;
+    bool isDead = false;
+    int harmfulContact = 0;
 
     void Start()
     {
@@ -54,7 +57,7 @@ public class PlayerController : MonoBehaviour, IGameService
 
     void Update()
     {
-        if (_currentState != LevelState.RUN) return;
+        if (_currentState != LevelState.RUN || isDead) return;
 
         moveX = Input.GetAxis("Horizontal");
         moveY = Input.GetAxis("Vertical");
@@ -106,21 +109,38 @@ public class PlayerController : MonoBehaviour, IGameService
         if (_currentState != LevelState.RUN)
             return;
 
-        if (isInvulnerable)
-            return;
-
         if (collision.CompareTag("Enemy"))
         {
+            if (isInvulnerable)
+            {
+                harmfulContact++;
+                return;
+            }
+
             GetDamage();
             Destroy(collision.gameObject);
         }
 
         if (collision.CompareTag("EnemyBullet"))
         {
-            if(!shield.activeSelf)
+            if (isInvulnerable)
+            {
+                harmfulContact++;
+                return;
+            }
+
+            if (!shield.activeSelf)
                 GetDamage();
 
             Destroy(collision.gameObject);
+        }
+    }
+
+    void OnTriggerExit2D(Collider2D collision)
+    {
+        if(collision.CompareTag("Enemy") || collision.CompareTag("EnemyBullet"))
+        {
+            harmfulContact--;
         }
     }
 
@@ -139,6 +159,14 @@ public class PlayerController : MonoBehaviour, IGameService
         _spriteRenderer.enabled = true;
 
         isInvulnerable = false;
+
+        CheckRemainingHarmfulContact();
+    }
+
+    void CheckRemainingHarmfulContact()
+    {
+        if (harmfulContact > 0)
+            GetDamage();
     }
 
     private void GetDamage()
@@ -163,6 +191,7 @@ public class PlayerController : MonoBehaviour, IGameService
         CancelInvoke();
         _uiController.GameOver();
         _animator.SetTrigger("explode");
+        isDead = true;
     }
 
     void OnEnable()
@@ -190,19 +219,23 @@ public class PlayerController : MonoBehaviour, IGameService
         {
             case LevelState.ASSEMBLE:
                 startEndAnims.EntranceAnim();
-            break;
+                canUseShield = false;
+                break;
             case LevelState.RUN:
                 InvokeRepeating(nameof(Shoot), 0f, 1 / shootSpeedPerSec);
-            break;
+                canUseShield = true;
+                break;
             case LevelState.PAUSE:
-            break;
+                break;
             case LevelState.COMPLETE:
                 CancelInvoke(nameof(Shoot));
                 startEndAnims.ExitAnim();
-            break;
+                canUseShield = false;
+                break;
             case LevelState.DISASSEMBLE:
                 RestorePlayer();
-            break;
+                canUseShield = false;
+                break;
         }
     }
 
@@ -219,7 +252,6 @@ public class PlayerController : MonoBehaviour, IGameService
 
         canUseShield = false;
         StartCoroutine(EnableShield());
-        _uiController.StartShieldCoolDown(shieldCooldown);
         Invoke(nameof(AllowShield), shieldCooldown);
     }
 
@@ -235,6 +267,7 @@ public class PlayerController : MonoBehaviour, IGameService
         }
 
         shield.SetActive(false);
+        _uiController.StartShieldCoolDown(shieldCooldown);
     }
 
     void AllowShield()

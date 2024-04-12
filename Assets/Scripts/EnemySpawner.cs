@@ -76,4 +76,12 @@ public class EnemySpawner : MonoBehaviour
     {
         Destroyed++;
     }
+
+    private void OnDisable()
+    {
+        foreach (Transform t in transform)
+        {
+            Destroy(t.gameObject);
+        }
+    }
 }
